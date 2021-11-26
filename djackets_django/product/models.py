@@ -61,4 +61,5 @@ class Product(models.Model):
         img.save(thumb_io, 'JPEG', quality=85)
 
         thumbnail = File(thumb_io, name=image.name)
+        
         return thumbnail
