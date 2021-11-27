@@ -26,6 +26,7 @@
 </template>
 <script>
 import axios from 'axios';
+import {toast} from 'bulma-toast'
 
 
     export default {
@@ -41,18 +42,23 @@ import axios from 'axios';
             this.getProduct()
         },
         methods: {
-            getProduct() {
+            async getProduct() {
+                this.$store.commit('setIsLoading', true)
+
                 const category_slug = this.$route.params.category_slug
                 console.log(category_slug)
                 const product_slug = this.$route.params.product_slug
 
-                axios.get(`/api/v1/products/${category_slug}/${product_slug}`)
+                await axios.get(`/api/v1/products/${category_slug}/${product_slug}`)
                     .then(response => {
                         this.product = response.data
+
+                        document.title = this.product.name + ' | Djackets'
                     })
                     .catch(error => {
                         console.log(error.message)
                     })
+                this.$store.commit('setIsLoading', false)
             },
             addToCart() {
                 if (isNaN(this.quantity) || this.quantity < 1) {
@@ -65,6 +71,15 @@ import axios from 'axios';
                 }
 
                 this.$store.commit('addToCart', item)
+
+                toast({
+                    message: 'The product was added to the cart',
+                    type: 'is_success',
+                    dismissible: true,
+                    pauseOnHover: true,
+                    duration: 2000,
+                    position: 'bottom-right',
+                })
             }
         },
     }

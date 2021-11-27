@@ -46,10 +46,11 @@ export default {
   },
   mounted() {
     this.getLatestProducts()
+    document.title = 'Home | Djackets'
   },
   methods: {
-    getLatestProducts() {
-      axios
+    async getLatestProducts() {
+      await axios
         .get('/api/v1/latest-products/')
         .then(response => {
           this.latestProducts = response.data
@@ -57,7 +58,11 @@ export default {
         .catch(error => {
           console.log(error.message)
         })
+          
+      this.$store.commit('setIsLoading', false)
     }
+
+
   },
 }
 </script>
