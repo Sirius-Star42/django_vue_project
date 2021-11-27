@@ -17,7 +17,7 @@
                         <input type="number" class="input" min="1" v-model="quantity">
                     </div>
                     <div class="control">
-                        <a class="button is-dark">Add to cart</a>
+                        <a class="button is-dark" @click="addToCart">Add to cart</a>
                     </div>
                 </div>
             </div>
@@ -53,14 +53,22 @@ import axios from 'axios';
                     .catch(error => {
                         console.log(error.message)
                     })
+            },
+            addToCart() {
+                if (isNaN(this.quantity) || this.quantity < 1) {
+                    this.quantity = 1
+                }
+
+                const item = {
+                    product: this.product,
+                    quantity: this.quantity
+                }
+
+                this.$store.commit('addToCart', item)
             }
         },
     }
 </script>
 <style scoped>
-/* img {
-    height: 20vh;
-    width: auto;
-} */
 
 </style>
